@@ -39,7 +39,7 @@ namespace SlimeVR
         void SensorManager::setup()
         {
             uint8_t firstIMUAddress = 0;
-            uint8_t secondIMUAddress = 0;
+            // uint8_t secondIMUAddress = 0;
 
             {
 #if IMU == IMU_BNO080 || IMU == IMU_BNO085 || IMU == IMU_BNO086
@@ -78,59 +78,59 @@ namespace SlimeVR
                 m_Sensor1->motionSetup();
             }
 
-            {
-#if SECOND_IMU == IMU_BNO080 || SECOND_IMU == IMU_BNO085 || SECOND_IMU == IMU_BNO086
-                secondIMUAddress = I2CSCAN::pickDevice(0x4B, 0x4A, false);
-#elif SECOND_IMU == IMU_BNO055
-                secondIMUAddress = I2CSCAN::pickDevice(0x28, 0x29, false);
-#elif SECOND_IMU == IMU_MPU9250 || SECOND_IMU == IMU_BMI160 || SECOND_IMU == IMU_MPU6500 || SECOND_IMU == IMU_MPU6050 || SECOND_IMU == IMU_ICM20948
-                secondIMUAddress = I2CSCAN::pickDevice(0x69, 0x68, false);
-#else
-#error Unsupported secondary IMU
-#endif
+            // {
+// #if SECOND_IMU == IMU_BNO080 || SECOND_IMU == IMU_BNO085 || SECOND_IMU == IMU_BNO086
+//                 secondIMUAddress = I2CSCAN::pickDevice(0x4B, 0x4A, false);
+// #elif SECOND_IMU == IMU_BNO055
+//                 secondIMUAddress = I2CSCAN::pickDevice(0x28, 0x29, false);
+// #elif SECOND_IMU == IMU_MPU9250 || SECOND_IMU == IMU_BMI160 || SECOND_IMU == IMU_MPU6500 || SECOND_IMU == IMU_MPU6050 || SECOND_IMU == IMU_ICM20948
+//                 secondIMUAddress = I2CSCAN::pickDevice(0x69, 0x68, false);
+// #else
+// #error Unsupported secondary IMU
+// #endif
 
-                if (secondIMUAddress == firstIMUAddress)
-                {
-                    m_Logger.debug("No secondary IMU connected");
-                }
-                else if (secondIMUAddress == 0)
-                {
-                    m_Sensor2 = new ErroneousSensor(1, SECOND_IMU);
-                }
-                else
-                {
-                    m_Logger.trace("Secondary IMU found at address 0x%02X", secondIMUAddress);
+                // if (secondIMUAddress == firstIMUAddress)
+                // {
+                //     m_Logger.debug("No secondary IMU connected");
+                // }
+                // else if (secondIMUAddress == 0)
+                // {
+                //     m_Sensor2 = new ErroneousSensor(1, SECOND_IMU);
+                // }
+                // else
+                // {
+                //     m_Logger.trace("Secondary IMU found at address 0x%02X", secondIMUAddress);
 
-#if SECOND_IMU == IMU_BNO080 || SECOND_IMU == IMU_BNO085 || SECOND_IMU == IMU_BNO086
-                    m_Sensor2 = new BNO080Sensor(1, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION, PIN_IMU_INT_2);
-#elif SECOND_IMU == IMU_BNO055
-                    m_Sensor2 = new BNO055Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
-#elif SECOND_IMU == IMU_MPU9250
-                    m_Sensor2 = new MPU9250Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
-#elif SECOND_IMU == IMU_BMI160
-                    m_Sensor2 = new BMI160Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
-#elif SECOND_IMU == IMU_MPU6500 || SECOND_IMU == IMU_MPU6050
-                    m_Sensor2 = new MPU6050Sensor(1, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION);
-#elif SECOND_IMU == IMU_ICM20948
-                    m_Sensor2 = new ICM20948Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
-#endif
-                }
+// #if SECOND_IMU == IMU_BNO080 || SECOND_IMU == IMU_BNO085 || SECOND_IMU == IMU_BNO086
+//                     m_Sensor2 = new BNO080Sensor(1, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION, PIN_IMU_INT_2);
+// #elif SECOND_IMU == IMU_BNO055
+//                     m_Sensor2 = new BNO055Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
+// #elif SECOND_IMU == IMU_MPU9250
+//                     m_Sensor2 = new MPU9250Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
+// #elif SECOND_IMU == IMU_BMI160
+//                     m_Sensor2 = new BMI160Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
+// #elif SECOND_IMU == IMU_MPU6500 || SECOND_IMU == IMU_MPU6050
+//                     m_Sensor2 = new MPU6050Sensor(1, SECOND_IMU, secondIMUAddress, SECOND_IMU_ROTATION);
+// #elif SECOND_IMU == IMU_ICM20948
+//                     m_Sensor2 = new ICM20948Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
+// #endif
+        //         }
 
-                m_Sensor2->motionSetup();
-            }
+        //         m_Sensor2->motionSetup();
+            // }
         }
 
         void SensorManager::postSetup()
         {
             m_Sensor1->postSetup();
-            m_Sensor2->postSetup();
+            // m_Sensor2->postSetup();
         }
 
         void SensorManager::update()
         {
             // Gather IMU data
             m_Sensor1->motionLoop();
-            m_Sensor2->motionLoop();
+            // m_Sensor2->motionLoop();
 
             if (!ServerConnection::isConnected())
             {
@@ -139,7 +139,7 @@ namespace SlimeVR
 
             // Send updates
             m_Sensor1->sendData();
-            m_Sensor2->sendData();
+            // m_Sensor2->sendData();
         }
     }
 }
